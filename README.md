@@ -10,5 +10,5 @@
  
 - Use git reset head to rollback to a previous commit in git
 - git log to show commit history
-- aws s3 cp ../index.html s3://achandratre-testsite/
+- aws s3 cp ../index.html s3://achandratre-testsite/ --acl public-read
    - upload: ../index.html to s3://achandratre-testsite/index.html
