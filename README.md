@@ -12,3 +12,7 @@
 - git log to show commit history
 - aws s3 cp ../index.html s3://achandratre-testsite/ --acl public-read
    - upload: ../index.html to s3://achandratre-testsite/index.html
+
+ aws s3 cp ../index.html s3://test-site.achandratre.info/ --acl public-read
+ aws s3 rm s3://test-site.achandratre.info/index.html
+
