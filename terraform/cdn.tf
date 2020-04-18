@@ -63,7 +63,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
     # SSL certificate for the service.
     viewer_certificate {
-        acm_certificate_arn = "arn:aws:acm:us-east-1:018200839170:certificate/82231101-07b8-4a81-a26f-15987ec8fd44"
+        acm_certificate_arn = data.aws_acm_certificate.example.arn
         ssl_support_method = "vip"
     }
 }
