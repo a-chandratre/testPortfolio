@@ -3,30 +3,34 @@ locals {
   s3_origin_id = "myS3Origin"
 }
 
+# Find a certificate issued by (not imported into) ACM
+data "aws_acm_certificate" "example" {
+  domain      = "*.achandratre.info"
+  types       = ["AMAZON_ISSUED"]
+  most_recent = true
+}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
     origin {
         domain_name = aws_s3_bucket.b.bucket_regional_domain_name
         origin_id = local.s3_origin_id
  
-        custom_origin_config {
-            http_port = 80
-            https_port = 443
-            origin_protocol_policy = "match-viewer"
-            origin_ssl_protocols = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-        }
     }
     # By default, show index.html file
     default_root_object = "index.html"
     enabled = true
     comment             = "Managed by Terraform"
 
+    aliases = ["test-site.achandratre.info"]
+
     # If there is a 404, return index.html with a HTTP 200 Response
     custom_error_response {
-        error_caching_min_ttl = 3000
+        error_caching_min_ttl = 30
         error_code = 404
         response_code = 200
         response_page_path = "/index.html"
     }
+
 
     default_cache_behavior {
         allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -59,6 +63,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
     # SSL certificate for the service.
     viewer_certificate {
-        cloudfront_default_certificate = true
+        acm_certificate_arn = "arn:aws:acm:us-east-1:018200839170:certificate/82231101-07b8-4a81-a26f-15987ec8fd44"
+        ssl_support_method = "vip"
     }
 }
