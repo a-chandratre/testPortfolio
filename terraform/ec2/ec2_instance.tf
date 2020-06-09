@@ -1,9 +1,9 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "amazon-linux-2" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm*"]
   }
 
   filter {
@@ -11,12 +11,14 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"]
+  owners = ["amazon"]
 }
 
 resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t2.micro"
+  key_name = aws_key_pair.server.id
+
 
   tags = {
     Name = "HelloWorld"
